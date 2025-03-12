@@ -1,0 +1,174 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Build A Boat For Treasure || Flandre Hub Premium",
+   Icon = 125307995960610, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Welcome to Flandre Hub",
+   LoadingSubtitle = "Script Make By 54hz",
+   Theme = "Bloom", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "flandrehub"
+   },
+
+   Discord = {
+      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Flandre Hub",
+      Subtitle = "Key Stytems",
+      Note = "to get key,chat to my bot in discord :nhm_roblox", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"b8d83ed2e0bbf2e4f45aa3c0166816dc"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+Rayfield:Notify({
+   Title = "thanks for buy script",
+   Content = "discord:https://discord.gg/NtakBUPbkW",
+   Duration = 6.5,
+   Image = 4483362458,
+})
+
+local Tab = Window:CreateTab("Main", 4483362458) -- Title, Image
+
+local Divider = Tab:CreateDivider()
+
+local Toggle = Tab:CreateToggle({
+   Name = "Auto Farm Gold",
+   CurrentValue = false,
+   Flag = "ToggleKill", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+getgenv().AutoFly = true -- Đặt thành false để tắt script
+
+local function startFlying()
+    if not getgenv().AutoFly then return end
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local hrp = character:WaitForChild("HumanoidRootPart")
+
+    local tweenService = game:GetService("TweenService")
+    local speed = 300 -- Tốc độ bay
+    local flightForce = Instance.new("BodyVelocity") -- Giữ nhân vật lơ lửng
+
+    flightForce.Velocity = Vector3.new(0, 0.1, 0) -- Giữ nhân vật trên không
+    flightForce.MaxForce = Vector3.new(0, math.huge, 0) -- Chỉ tác động lực theo trục Y
+    flightForce.Parent = hrp -- Gắn vào HumanoidRootPart
+
+    -- Function để bay đến một vị trí
+    local function flyTo(targetPosition)
+        if not getgenv().AutoFly then return end
+        local distance = (targetPosition - hrp.Position).Magnitude
+        local duration = distance / speed -- Tính thời gian bay dựa trên khoảng cách và tốc độ
+        
+        local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear)
+        local tween = tweenService:Create(hrp, tweenInfo, {CFrame = CFrame.new(targetPosition)})
+        tween:Play()
+        tween.Completed:Wait()
+    end
+
+    -- Dịch chuyển đến điểm đầu tiên
+    hrp.CFrame = CFrame.new(-53.5656852722168, 100.59999084472656, 331.44317626953125)
+    wait(1)
+
+    -- Bay đến điểm thứ hai
+    flyTo(Vector3.new(-53.5656738, 100, 8447.8916))
+    wait(1)
+
+    -- Bay đến điểm thứ ba
+    flyTo(Vector3.new(-55.706512451171875, -358.7396240234375, 9492.3564453125))
+
+    -- Xóa BodyVelocity khi đã đến điểm cuối
+    flightForce:Destroy()
+end
+
+-- Kích hoạt script khi nhân vật respawn
+local player = game.Players.LocalPlayer
+player.CharacterAdded:Connect(function()
+    wait(1) -- Đợi nhân vật load xong
+    startFlying()
+end)
+
+-- Chạy ngay khi lần đầu chạy script
+startFlying()
+
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "Auto Farm Gold Fast",
+   CurrentValue = false,
+   Flag = "ToggleKill2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+getgenv().AutoFly = true -- Đặt thành false để tắt script
+
+local function startFlying()
+    if not getgenv().AutoFly then return end
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local hrp = character:WaitForChild("HumanoidRootPart")
+
+    local tweenService = game:GetService("TweenService")
+    local speed = 300 -- Tốc độ bay
+    local flightForce = Instance.new("BodyVelocity") -- Giữ nhân vật lơ lửng
+
+    flightForce.Velocity = Vector3.new(0, 0.1, 0) -- Giữ nhân vật trên không
+    flightForce.MaxForce = Vector3.new(0, math.huge, 0) -- Chỉ tác động lực theo trục Y
+    flightForce.Parent = hrp -- Gắn vào HumanoidRootPart
+
+    -- Function để bay đến một vị trí
+    local function flyTo(targetPosition)
+        if not getgenv().AutoFly then return end
+        local distance = (targetPosition - hrp.Position).Magnitude
+        local duration = distance / speed -- Tính thời gian bay dựa trên khoảng cách và tốc độ
+        
+        local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear)
+        local tween = tweenService:Create(hrp, tweenInfo, {CFrame = CFrame.new(targetPosition)})
+        tween:Play()
+        tween.Completed:Wait()
+    end
+
+    -- Dịch chuyển đến điểm đầu tiên
+    hrp.CFrame = CFrame.new(-53.5656852722168, 100.59999084472656, 331.44317626953125)
+    wait(1)
+
+    -- Bay đến điểm thứ hai (mới)
+    flyTo(Vector3.new(-53.56591796875, 100, 1753.8919677734375))
+    wait(1)
+
+    -- Dịch chuyển ngay đến điểm thứ ba
+    hrp.CFrame = CFrame.new(-55.706512451171875, -358.7396240234375, 9492.3564453125)
+
+    -- Xóa BodyVelocity khi đã đến điểm cuối
+    flightForce:Destroy()
+end
+
+-- Kích hoạt script khi nhân vật respawn
+local player = game.Players.LocalPlayer
+player.CharacterAdded:Connect(function()
+    wait(1) -- Đợi nhân vật load xong
+    startFlying()
+end)
+
+-- Chạy ngay khi lần đầu chạy script
+startFlying()
+
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
