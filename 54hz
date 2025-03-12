@@ -140,8 +140,8 @@ local Toggle = Tab:CreateToggle({
    Name = "Auto Farm Gold Fast",
    CurrentValue = false,
    Flag = "ToggleKill2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-getgenv().AutoFly = Value -- Đặt thành false để tắt script
+   Callback = function(Value2)
+getgenv().AutoFly = Value2 -- Đặt thành false để tắt script
 
 local function startFlying()
     if not getgenv().AutoFly then return end
