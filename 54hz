@@ -50,7 +50,7 @@ local Toggle = Tab:CreateToggle({
    CurrentValue = false,
    Flag = "ToggleKill", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
-getgenv().AutoFly = true -- Đặt thành false để tắt script
+getgenv().AutoFly = Value -- Đặt thành false để tắt script
 
 local function startFlying()
     if not getgenv().AutoFly then return end
@@ -58,46 +58,73 @@ local function startFlying()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
     local hrp = character:WaitForChild("HumanoidRootPart")
-
     local tweenService = game:GetService("TweenService")
     local speed = 300 -- Tốc độ bay
-    local flightForce = Instance.new("BodyVelocity") -- Giữ nhân vật lơ lửng
 
-    flightForce.Velocity = Vector3.new(0, 0.1, 0) -- Giữ nhân vật trên không
-    flightForce.MaxForce = Vector3.new(0, math.huge, 0) -- Chỉ tác động lực theo trục Y
-    flightForce.Parent = hrp -- Gắn vào HumanoidRootPart
+    -- Giữ nhân vật lơ lửng
+    local flightForce = Instance.new("BodyVelocity")
+    flightForce.Velocity = Vector3.new(0, 0.1, 0)
+    flightForce.MaxForce = Vector3.new(0, math.huge, 0)
+    flightForce.Parent = hrp
 
     -- Function để bay đến một vị trí
     local function flyTo(targetPosition)
-        if not getgenv().AutoFly then return end
+        if not getgenv().AutoFly then return flightForce:Destroy() end
+
         local distance = (targetPosition - hrp.Position).Magnitude
-        local duration = distance / speed -- Tính thời gian bay dựa trên khoảng cách và tốc độ
-        
+        local duration = distance / speed
         local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear)
         local tween = tweenService:Create(hrp, tweenInfo, {CFrame = CFrame.new(targetPosition)})
+
         tween:Play()
-        tween.Completed:Wait()
+
+        -- Kiểm tra nếu AutoFly bị tắt giữa chừng
+        while tween.PlaybackState == Enum.PlaybackState.Playing do
+            if not getgenv().AutoFly then 
+                tween:Cancel()
+                flightForce:Destroy()
+                return
+            end
+            task.wait()
+        end
     end
 
-    -- Dịch chuyển đến điểm đầu tiên
-    hrp.CFrame = CFrame.new(-53.5656852722168, 100.59999084472656, 331.44317626953125)
-    wait(1)
+    while getgenv().AutoFly do
+        -- Dịch chuyển đến điểm đầu tiên
+        hrp.CFrame = CFrame.new(-53.5656852722168, 100.59999084472656, 331.44317626953125)
+        task.wait(1)
+        if not getgenv().AutoFly then return flightForce:Destroy() end
 
-    -- Bay đến điểm thứ hai
-    flyTo(Vector3.new(-53.5656738, 100, 8447.8916))
-    wait(1)
+        -- Bay đến điểm thứ hai
+        flyTo(Vector3.new(-53.5656738, 100, 8447.8916))
+        task.wait(1)
+        if not getgenv().AutoFly then return flightForce:Destroy() end
 
-    -- Bay đến điểm thứ ba
-    flyTo(Vector3.new(-55.706512451171875, -358.7396240234375, 9492.3564453125))
+        -- Bay đến điểm thứ ba
+        flyTo(Vector3.new(-55.706512451171875, -358.7396240234375, 9492.3564453125))
 
-    -- Xóa BodyVelocity khi đã đến điểm cuối
+        -- Chờ 5 giây xem nhân vật có respawn không
+        local respawned = false
+        player.CharacterAdded:Connect(function()
+            respawned = true
+        end)
+        task.wait(5)
+
+        -- Nếu chưa respawn, tiếp tục vòng lặp
+        if not respawned then
+            continue
+        else
+            break
+        end
+    end
+
     flightForce:Destroy()
 end
 
 -- Kích hoạt script khi nhân vật respawn
 local player = game.Players.LocalPlayer
 player.CharacterAdded:Connect(function()
-    wait(1) -- Đợi nhân vật load xong
+    task.wait(1)
     startFlying()
 end)
 
@@ -114,7 +141,7 @@ local Toggle = Tab:CreateToggle({
    CurrentValue = false,
    Flag = "ToggleKill2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
-getgenv().AutoFly = true -- Đặt thành false để tắt script
+getgenv().AutoFly = Value -- Đặt thành false để tắt script
 
 local function startFlying()
     if not getgenv().AutoFly then return end
@@ -122,46 +149,73 @@ local function startFlying()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
     local hrp = character:WaitForChild("HumanoidRootPart")
-
     local tweenService = game:GetService("TweenService")
     local speed = 300 -- Tốc độ bay
-    local flightForce = Instance.new("BodyVelocity") -- Giữ nhân vật lơ lửng
 
-    flightForce.Velocity = Vector3.new(0, 0.1, 0) -- Giữ nhân vật trên không
-    flightForce.MaxForce = Vector3.new(0, math.huge, 0) -- Chỉ tác động lực theo trục Y
-    flightForce.Parent = hrp -- Gắn vào HumanoidRootPart
+    -- Giữ nhân vật lơ lửng
+    local flightForce = Instance.new("BodyVelocity")
+    flightForce.Velocity = Vector3.new(0, 0.1, 0)
+    flightForce.MaxForce = Vector3.new(0, math.huge, 0)
+    flightForce.Parent = hrp
 
     -- Function để bay đến một vị trí
     local function flyTo(targetPosition)
-        if not getgenv().AutoFly then return end
+        if not getgenv().AutoFly then return flightForce:Destroy() end
+
         local distance = (targetPosition - hrp.Position).Magnitude
-        local duration = distance / speed -- Tính thời gian bay dựa trên khoảng cách và tốc độ
-        
+        local duration = distance / speed
         local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear)
         local tween = tweenService:Create(hrp, tweenInfo, {CFrame = CFrame.new(targetPosition)})
+
         tween:Play()
-        tween.Completed:Wait()
+
+        -- Kiểm tra nếu AutoFly bị tắt giữa chừng
+        while tween.PlaybackState == Enum.PlaybackState.Playing do
+            if not getgenv().AutoFly then 
+                tween:Cancel()
+                flightForce:Destroy()
+                return
+            end
+            task.wait()
+        end
     end
 
-    -- Dịch chuyển đến điểm đầu tiên
-    hrp.CFrame = CFrame.new(-53.5656852722168, 100.59999084472656, 331.44317626953125)
-    wait(1)
+    while getgenv().AutoFly do
+        -- Dịch chuyển đến điểm đầu tiên
+        hrp.CFrame = CFrame.new(-53.5656852722168, 100.59999084472656, 331.44317626953125)
+        task.wait(1)
+        if not getgenv().AutoFly then return flightForce:Destroy() end
 
-    -- Bay đến điểm thứ hai (mới)
-    flyTo(Vector3.new(-53.56591796875, 100, 1753.8919677734375))
-    wait(1)
+        -- Bay đến điểm thứ hai (mới)
+        flyTo(Vector3.new(-53.56591796875, 100, 1753.8919677734375))
+        task.wait(1)
+        if not getgenv().AutoFly then return flightForce:Destroy() end
 
-    -- Dịch chuyển ngay đến điểm thứ ba
-    hrp.CFrame = CFrame.new(-55.706512451171875, -358.7396240234375, 9492.3564453125)
+        -- Dịch chuyển ngay đến điểm thứ ba
+        hrp.CFrame = CFrame.new(-55.706512451171875, -358.7396240234375, 9492.3564453125)
 
-    -- Xóa BodyVelocity khi đã đến điểm cuối
+        -- Chờ 5 giây xem nhân vật có respawn không
+        local respawned = false
+        player.CharacterAdded:Connect(function()
+            respawned = true
+        end)
+        task.wait(5)
+
+        -- Nếu chưa respawn, tiếp tục vòng lặp
+        if not respawned then
+            continue
+        else
+            break
+        end
+    end
+
     flightForce:Destroy()
 end
 
 -- Kích hoạt script khi nhân vật respawn
 local player = game.Players.LocalPlayer
 player.CharacterAdded:Connect(function()
-    wait(1) -- Đợi nhân vật load xong
+    task.wait(1)
     startFlying()
 end)
 
